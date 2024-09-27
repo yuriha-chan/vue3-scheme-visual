@@ -1,0 +1,1 @@
+export default (ns, name) => ({ type: "syntax-keyword", value: { namespace:ns, name } });
