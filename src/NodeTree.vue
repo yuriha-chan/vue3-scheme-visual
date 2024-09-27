@@ -4,8 +4,11 @@ import { defineAsyncComponent } from 'vue'
 
 <template>
   <div class="tree-node">
-    <div v-if="node.type" :class="['node-head', node.type]">{{ node.label }}</div>
-    <SlotList v-if="node.slots" :values="node.slots" :editorState="editorState"/>
+    <div class="rotate">
+    <div v-if="node.type" :class="['node-head', node.type]" @click="rotateLists">{{ node.label }}</div>
+    <SlotList v-if="node.slots" :values="node.slots" :editorState="editorState" :rotate="true" :rotateIndex="rotate" :j="0"/>
+    </div>
+    <SlotList v-if="node.slots" :values="node.slots" :editorState="editorState" :rotate="false" :rotateIndex="rotate" :j="rotate"/>
   </div>
 </template>
 
@@ -16,10 +19,16 @@ export default {
     editorState: Object,
     index: String,
   },
+  data() {
+    return { rotate: 0 }
+  },
   components:  {
     "SlotList": defineAsyncComponent(() => import('./SlotList.vue'))
   },
   methods: {
+    rotateLists() {
+      this.rotate = (this.rotate + 1) % (this.node.slots ? (this.node.slots.length + 1): 2) ;
+    },
   },
 };
 </script>
@@ -29,15 +38,21 @@ export default {
   display: flex;
   flex-direction: column;
 }
+
+.rotate {
+  display: flex;
+  flex-direction: row;
+}
+
 .node-head {
   display: block;
-  border-radius: 0.5em;
-  font-family: monospace, monospace;
-  padding: 0.3em;
+  font-family: "Droid Sans Mono", monospace, monospace;
+  font-weight: bold;
+  padding: 2px 0 2px;
+  min-width: 60px;
 }
 .node-head.function {
-  background-color: #23c;
-  color: #fff;
+  color: #00f;
 }
 
 .highlight {

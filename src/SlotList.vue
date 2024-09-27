@@ -6,27 +6,26 @@ import parse from './Parser.js'
 </script>
 
 <template>
-  <div class="slotlists">
-    <div v-for="(item, i) in items" class="entry" :key="item.index">
-      <div class="slot-container" :class="[item.type]">
-        <svg viewBox="-10 -10 20 20" xmlns="http://www.w3.org/2000/svg" width="20" height="20"  @click.right.prevent="onRClick(i)">
-          <path v-if="item.type == 'clause'" d='M 0 -8 L 0 8 M 0 0 L 10 0'/>
+  <div class="slotlists" :class="rotate ? 'rotate' : 'vertical'">
+    <div v-for="(item, i) in items.slice(j, rotate ? rotateIndex : undefined)" class="entry" :class="item.type" :key="item.index">
+      <div class="slot-container">
+        <svg viewBox="-10 -10 20 20" xmlns="http://www.w3.org/2000/svg" width="20" height="20"  @click.right.prevent="onRClick(i + j)">
+          <path v-if="!rotate && item.type === 'clause'" d='M 0 -8 L 0 8 M 0 0 L 10 0'/>
+          <path v-else-if="item.type === 'ellipsis'" class="ellipsis" d="M 0 -8 L 8 0 L 0 8 L -8 0 Z" @click="onClick(i + j)"/>
           <circle v-else cx="0" cy="0" r="7"
             :class="[item.assignment ? 'attached' : 'empty']"
-            @click="onClick(i)"/>
+            @click="onClick(i + j)"/>
         </svg>
-        <div v-if="i != items.length-1" class="slot-filler"/>
+        <div v-if="!rotate && i + j !== items.length-1" class="slot-filler"/>
       </div>
-      <div v-if="item.type == 'ellipsis'" class="value-container ellipsis-label" @click="onClick(i)">
-        expand list…
+      <div v-if="item.type == 'ellipsis'" class="value-container ellipsis-label" @click="onClick(i + j)">…</div>
+      <div v-else-if="item.editing" class="value-container">
+        <input v-model="inputs[i + j]" :placeholder="item.template.placeholder" @keydown.enter="onClick(i + j)" :ref="(r) => {inputRefs[i + j] = r;}" />
       </div>
-      <div v-else-if="item.editing">
-        <input v-model="inputs[i]" :placeholder="item.template.placeholder" @keydown.enter="onClick(i)" :ref="(r) => {inputRefs[i] = r;}" />
-      </div>
-      <div v-else-if="item.assignment" class="value-container">
+      <div v-else-if="item.assignment" :class="['value-container', item.assignment.type]">
         <NodeTree :editorState="editorState" :node="item.assignment"/>
       </div>
-      <div v-else class="value-container placeholder" @click="onClick(i)">
+      <div v-else class="value-container placeholder" @click="onClick(i + j)">
         {{ item.template.placeholder ?? "add node ..."}}
       </div>
     </div>
@@ -78,7 +77,7 @@ export default {
       inputRefs: [],
     };
   },
-  props: ["values", "editorState"],
+  props: ["values", "rotate", "j", "rotateIndex", "editorState"],
   methods: {
     async onClick(i) {
       let item = this.items[i];
@@ -130,6 +129,11 @@ export default {
 <style>
 .slotlists {
   padding: 2px 0 0;
+  display: flex;
+  flex-direction: column;
+}
+.slotlists.rotate {
+  flex-direction: row;
 }
 svg {
   margin: 4px 0 0;
@@ -149,10 +153,27 @@ circle.empty {
 .literal, input {
   font-family: "DejaVu Sans Mono", monospace, monospace;
 }
+.value-container {
+  border-radius: 5px;
+  border: 2px solid transparent;
+  margin: 0 0 4px;
+}
+.entry.value > .value-container {
+  background-color: #fff;
+}
+.entry.value > .value-container.function, .value-container.function {
+  border-color: #88f;
+  background-color: #ddf;
+}
+.entry.value > .value-container.keyword {
+  border-color: #eeee33;
+  background-color: #faf8dd;
+}
+
 .symbol.literal {
   color: #3a3;
   font-weight: bold;
-  padding: 3px 0.6em 3px;
+  padding: 0 10px 0;
 }
 .value circle.attached {
   fill: #99c;
@@ -162,11 +183,13 @@ circle.empty {
   stroke-width: 2px;
   stroke: #5a5;
 }
-.ellipsis circle {
-  fill: #eee;
-  stroke: #888;
+path.ellipsis {
+  fill: #f3f3f3;
+  stroke-width: 2px;
+  stroke: #aaa;
   stroke-dasharray: none;
 }
+
 path {
   fill: none;
   stroke: #888;
@@ -191,11 +214,11 @@ path {
   padding-left: 0.6em;
 }
 .value-container {
-  padding-bottom: 0.4em;
+  padding-left: 4px;
 }
 .placeholder {
   color: #999;
   font-style: italic;
-  padding-left: 0.6em;
+  padding: 0 10px 0;
 }
 </style>

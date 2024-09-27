@@ -22,11 +22,11 @@ const builtins: Record<string, HeadedNode> = {
     ] },
   "quote":  { type: "keyword", label: "quote", value: keyword("quote"), slots: [
       { type: "quote", placeholder: "literal value" }] },
-  "quasiquote":  { type: "keyword", label: "quote", value: keyword("quote"), slots: [
+  "quasiquote":  { type: "keyword", label: "quasiquote", value: keyword("quasiquote"), slots: [
       { type: "quasiquote", placeholder: "list template" }] },
-  "unquote":  { type: "keyword", label: "unquote", value: keyword("quote"), slots: [
+  "unquote":  { type: "keyword", label: "unquote", value: keyword("unquote"), slots: [
       { type: "value", placeholder: "value" }] },
-  "unquote-splicing":  { type: "keyword", label: "unquote-splicing", value: keyword("quote"), slots: [
+  "unquote-splicing":  { type: "keyword", label: "unquote-splicing", value: keyword("unquote-splicing"), slots: [
       { type: "value", placeholder: "in-place value" }] },
   "define": { type: "keyword", label: "define", value: keyword("define"), slots: [
       { type: "symbol", placeholder: "name" },

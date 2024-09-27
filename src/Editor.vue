@@ -9,7 +9,7 @@ import SlotList from './SlotList.vue'
     <SlotList :values="[
      { type: 'value', assignment: null, template: { type: 'value', placeholder: 'body ...' } },
      { type: 'ellipsis', template: { type: 'value', placeholder: 'body ...' } }]"
-     :editorState="editorState" key="root"/>
+     :editorState="editorState" :rotateIndex="0" :rotate="false" :j="0" key="root"/>
   </div>
 </template>
 
