@@ -34,7 +34,7 @@ export default {
         slots.push(child);
         last = slot;
       }
-      ret.assignment = { type: null, slots };
+      ret.assignment = { type: null, slots, rotate: template.rotate };
     }
     return ret;
   },

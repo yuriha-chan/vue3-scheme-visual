@@ -8,6 +8,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@vueform/toggle": "^2.1.4",
     "corepack": "^0.29.4",
     "n": "^10.0.0",
     "vue": "^3.4.0"

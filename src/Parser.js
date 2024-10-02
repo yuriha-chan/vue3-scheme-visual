@@ -53,7 +53,6 @@ function parseSExpression(input) {
 
     // Main function to parse an expression
     function parseExpression() {
-	console.log(input, index)
         skipWhitespace();
         if (input[index] === '(') {
             index++;  // Skip '('
@@ -87,6 +86,9 @@ function parseSExpression(input) {
 
     // Main entry point to parse the full input
     skipWhitespace();
+    if (index >= input.length) {
+      return { type: "undefined", value: undefined };
+    }
     return parseExpression();
 }
 

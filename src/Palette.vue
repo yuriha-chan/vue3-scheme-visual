@@ -4,7 +4,7 @@ import builtins from './Builtin.ts'
 <template>
   <div class="palette">
     <ul>
-      <li v-for="item in items" :class="[item.type, item == selected ? 'selected' : 'inactive']" @click="onClick(item)">
+      <li v-for="item in items" :class="[item.type, item == selected ? 'selected' : 'inactive']" draggable="true" @dragstart="onClick(item, $event)">
         {{ item.label }}
       </li>
     </ul>
@@ -21,7 +21,8 @@ export default {
   },
   props: ["selected"],
   methods: {
-    onClick(item) {
+    onClick(item, e) {
+      e.stopPropagation();
       this.$emit("selectPalette", item)
     },
   },
