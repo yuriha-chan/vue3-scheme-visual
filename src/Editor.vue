@@ -63,11 +63,11 @@ export default {
       this.editorState.dragTarget = item;
       this.editorState.draggingFromPalette = true;
     },
-    async appendLog(type, x) {
-      this.editorState.logs.push({ type, timestamp: new Date(), log: x }); await this.$nextTick(); this.logsSentinel.scrollIntoView()
+    async appendLog(type, ...x) {
+      this.editorState.logs.push({ type, timestamp: new Date(), log: JSON.stringify(x) }); await this.$nextTick(); this.logsSentinel.scrollIntoView()
     },
     evaluate() {
-      evalExpression(this.editorState.root, { log: (x) => this.appendLog("log", x) }, (v) => this.appendLog("eval", v) );
+      evalExpression(this.editorState.root, { log: (...x) => this.appendLog("log", ...x) }, (v) => this.appendLog("eval", v),  (...v) => this.appendLog("error", ...v));
     }
   }
 }

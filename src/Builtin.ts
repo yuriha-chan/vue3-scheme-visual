@@ -1,7 +1,15 @@
 import type { HeadedNode } from "./Types.d.ts"
 import keywordWithNS from "./Syntax-keyword.js"
 
-const keyword = (name) => keywordWithNS("builtin", name);
+const builtinsNS = {};
+const keyword = (name) => {
+  if (builtinsNS[name]) {
+    return builtinsNS[name] 
+  } else {
+    builtinsNS[name] = keywordWithNS("builtin", name);
+    return builtinsNS[name]
+  }
+};
 
 const builtins: Record<string, HeadedNode> = {
   "library": { type: "keyword", label: "library", value: keyword("library"),
@@ -116,6 +124,14 @@ const builtins: Record<string, HeadedNode> = {
     { type: "value", placeholder: "element ..." },
     { type: "ellipsis" }
   ]},
+  "x->string": { type: "function", label: "x->string", rotate: 0,
+    value: (x) => 
+      (x.type === "syntax-keyword") ? `#syntax-keyword<${x.namespace}:${x.name}>` :
+      x ,
+    slots: [
+      { type: "value", placeholder: "any object ..." },
+      { type: "ellipsis" }
+    ] },
   "print": { type: "function.io", label: "print", rotate: 2, value: (io, ...x) => io.log(...x), slots: [
       { type: "value", placeholder: "string ..." },
       { type: "ellipsis" }

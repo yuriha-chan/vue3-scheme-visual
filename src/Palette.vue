@@ -23,6 +23,7 @@ export default {
   methods: {
     onClick(item, e) {
       e.stopPropagation();
+      console.log("startDrag", item);
       this.$emit("selectPalette", item)
     },
   },

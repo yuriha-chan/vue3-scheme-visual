@@ -120,6 +120,7 @@ export default {
       }
       if (this.editorState.draggingFromPalette) {
         let slots = Syntax.generateAll(target);
+        console.log("on pallete drop", target.value);
         this.items[i].assignment = { type: target.type, label: target.label, value: target.value, rotate: target.rotate, slots: slots };
       } else {
         this.items[i].assignment = target.assignment;
