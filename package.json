@@ -8,6 +8,8 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@3d-dice/dice-box": "^1.1.4",
+    "@3d-dice/theme-rock": "^0.2.0",
     "@vueform/toggle": "^2.1.4",
     "corepack": "^0.29.4",
     "n": "^10.0.0",

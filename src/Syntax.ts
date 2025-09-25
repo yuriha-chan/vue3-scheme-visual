@@ -6,14 +6,13 @@ function isEllipsis(arg: SlotInstance): arg is EllipsisLotInstance {
   return arg.type === "ellipsis";
 }
 export default {
-  counter: 0,
-  generate(template: SlotEntry) {    
+  generate(template: SlotEntry, counter) {
     let ret: SlotInstance = {
       type: template.type,
       template: template,
       assignment: null,
       expanded: false,
-      index: "" + this.counter++,
+      index: "" + counter.next(),
     };
     let slots: SlotInstance[] = [];
     if (isClause(ret)) {
@@ -24,10 +23,10 @@ export default {
           template: slot,
           assignment: null,
           expanded: false,
-          index: "" + this.counter++,
+          index: "" + counter.next(),
         };
         if (isClause(child)) {
-          child = this.generate(slot)
+          child = this.generate(slot, counter)
         } else if (isEllipsis(child)) {
           child.template = last;
         }
@@ -38,8 +37,8 @@ export default {
     }
     return ret;
   },
-  generateAll(node: HeadedNode) {
-    let s = node.slots.map((x) => this.generate(x));
+  generateAll(node: HeadedNode, counter) {
+    let s = node.slots.map((x) => this.generate(x, counter));
     s.forEach((v, n) => {
       if (isEllipsis(v)) {
         v.template = s[n-1].template;

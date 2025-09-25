@@ -47,17 +47,18 @@ li {
   border: 1px solid #fff;
   border-radius: 0.4em;
   font-family: monospace, monospace;
-  }
+}
 li.keyword {
-  background-color: #970;
-  color: #fff;
+  background-color: var(--keyword-bg);
+  color: var(--fg);
 }
 li.constant{
-  border-color: #888;
+  background-color: var(--constant-bg);
+  color: var(--fg);
 }
 li.function {
-  background-color: #23a;
-  color: #fff;
+  background-color: var(--function-bg);
+  color: var(--fg);
 }
 li.selected {
   outline: 3px solid #f80;
